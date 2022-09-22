@@ -72,7 +72,7 @@ function _runFile(...args) {
 				msgOut: stdout,
 				msgErr: stderr,
 				isError: Boolean(stderr),
-				data: stdout.replace(/\r\n/gi, '\n').split('\n'),
+				data: stdout.replace(/\r\n/gi, '\n').split('\n').filter(f => f.length > 0),
 			});
 		});
 	});
