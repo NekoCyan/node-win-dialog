@@ -1,0 +1,19 @@
+{
+  "name": "node-win-dialog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "types": "index.d.ts",
+  "directories": {
+    "lib": "./"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
