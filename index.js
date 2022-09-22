@@ -158,16 +158,6 @@ function verifyStringMessage(message) {
 	}
 }
 
-function copyFiles(dest) {
-	const files = ['dialog.vbs', 'input.vbs'];
-	for (const file of files) {
-		fs.copyFileSync(
-			path.join('.', file),
-			path.join(dest, file),
-		);
-	}
-}
-
 function _runVBS(cmd, ...args) {
 	args = ['/nologo', ...args.flat(2)]
 	.filter(c => typeof c == 'number' || c?.length > 0);
@@ -272,7 +262,54 @@ class Dialog {
 			throw new Error('This script only works on Windows');
 		}
 		this.workingDir = this.createFolder();
-		copyFiles(this.workingDir);
+		this.start();
+	}
+	start() {
+		const dialog_ = `Set objArgs = WScript.Arguments
+messageText = objArgs(0)
+messageType = objArgs(1)
+messageTitle = objArgs(2)
+retValue = MsgBox(messageText, messageType, messageTitle)
+WScript.StdOut.Write retValue
+WScript.Quit(0)`
+		writeFile(this.workingDir, 'dialog.vbs', dialog_);
+		const input_ = `Dim retValue, msgText, msgTitle, msgTextDefault, xPos, yPos
+retValue = 0
+Set objArgs = WScript.Arguments
+length = WScript.Arguments.Length
+If length = 1 Then
+    msgText = objArgs(0)
+    retValue=Inputbox(msgText)
+End If
+If length = 2 Then
+    msgText = objArgs(0)
+    msgTitle = objArgs(1)
+    retValue=Inputbox(msgText,msgTitle)
+End If
+If length = 3 Then
+    msgText = objArgs(0)
+    msgTitle = objArgs(1)
+    msgTextDefault = objArgs(2)
+    retValue=Inputbox(msgText,msgTitle,msgTextDefault)
+End If
+If length = 4 Then
+    msgText = objArgs(0)
+    msgTitle = objArgs(1)
+    msgTextDefault = objArgs(2)
+    xPos = objArgs(3)
+    retValue=Inputbox(msgText,msgTitle,msgTextDefault,xPos)
+End If
+If length = 5 Then
+    msgText = objArgs(0)
+    msgTitle = objArgs(1)
+    msgTextDefault = objArgs(2)
+    xPos = objArgs(3)
+    yPos = objArgs(4)
+    retValue=Inputbox(msgText,msgTitle,msgTextDefault,xPos,yPos)
+End If
+WScript.StdOut.Write retValue
+WScript.Quit(0)`
+		writeFile(this.workingDir, 'input.vbs', input_);
 	}
 	createFolder() {
 		// Temp folder/ uuid
