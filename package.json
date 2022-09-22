@@ -1,6 +1,6 @@
 {
   "name": "node-win-dialog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,9 +10,20 @@
   "directories": {
     "lib": "./"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aiko-chan-ai/node-win-dialog.git"
+  },
+  "keywords": [
+    "windows",
+    "dialog"
+  ],
+  "author": "aiko-chan-ai",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aiko-chan-ai/node-win-dialog/issues"
+  },
+  "homepage": "https://github.com/aiko-chan-ai/node-win-dialog#readme",
   "dependencies": {
     "path": "^0.12.7"
   }
