@@ -108,40 +108,40 @@ function parseOptionDialog(type, button, defaultButton, icon) {
 	}
 	if (typeof type === 'number') {
 		const type_ = messageType[type];
-		if (!type_) throw new Error('Invalid messageType ' + type);
+		if (type_ === undefined) throw new Error('Invalid messageType ' + type);
 	}
 	if (typeof button === 'number') {
 		const button_ = Button[button];
-		if (!button_) throw new Error('Invalid Button ' + button);
+		if (button_ === undefined) throw new Error('Invalid Button ' + button);
 	}
 	if (typeof defaultButton === 'number') {
 		const defaultButton_ = buttonDefault[defaultButton];
-		if (!defaultButton_)
+		if (defaultButton_ === undefined)
 			throw new Error('Invalid buttonDefault ' + defaultButton);
 	}
 	if (typeof icon === 'number') {
 		const icon_ = Icon[icon];
-		if (!icon_) throw new Error('Invalid Icon ' + icon);
+		if (icon_ === undefined) throw new Error('Invalid Icon ' + icon);
 	}
 	if (typeof type === 'string') {
 		const type_ = messageType[type];
-		if (!type_) throw new Error('Invalid messageType ' + type);
+		if (type_ === undefined) throw new Error('Invalid messageType ' + type);
 		type = type_;
 	}
 	if (typeof button === 'string') {
 		const button_ = Button[button];
-		if (!button_) throw new Error('Invalid Button ' + button);
+		if (button_ === undefined) throw new Error('Invalid Button ' + button);
 		button = button_;
 	}
 	if (typeof defaultButton === 'string') {
 		const defaultButton_ = buttonDefault[defaultButton];
-		if (!defaultButton_)
+		if (defaultButton_ === undefined)
 			throw new Error('Invalid buttonDefault ' + defaultButton);
 		defaultButton = defaultButton_;
 	}
 	if (typeof icon === 'string') {
 		const icon_ = Icon[icon];
-		if (!icon_) throw new Error('Invalid Icon ' + icon);
+		if (icon_ === undefined) throw new Error('Invalid Icon ' + icon);
 		icon = icon_;
 	}
 	return type + button + defaultButton + icon;
@@ -160,7 +160,7 @@ function verifyStringMessage(message) {
 
 function _runVBS(cmd, ...args) {
 	args = ['/nologo', ...args.flat(2)]
-	.filter(c => typeof c == 'number' || c?.length > 0);
+		.filter(c => typeof c == 'number' || c?.length > 0);
 
 	return new Promise((resolve, reject) => {
 		const spawn = child.spawn(cmd, args, { detached: true });
