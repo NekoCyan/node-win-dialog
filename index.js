@@ -1,6 +1,8 @@
 const child = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const WinTools = require('./WinTools.js');
+const config = require('./config.js');
 
 const Button = {
 	OK: 0,
@@ -207,28 +209,7 @@ function getFileChoose(workingDir, multiFile = false, title = 'Open', ...filterD
 	let filter = filterData.flat(2).filter(invalidFilter).map(f => `${f.name}|${f.ext}`).join('|');
 	if (filter) filter += '|'
 	return new Promise((resolve, reject) => {
-		let dialog = `<# : chooser.bat
-:: launches a File... Open sort of file chooser and outputs choice(s) to the console
-:: https://stackoverflow.com/a/15885133/1683264
-
-@echo off
-setlocal
-for /f "delims=" %%I in ('powershell -noprofile "iex (\${%~f0} | out-string)"') do (
-    echo %%~I
-)
-goto :EOF
-
-: end Batch portion / begin PowerShell hybrid chimera #>
-
-Add-Type -AssemblyName System.Windows.Forms
-$f = new-object Windows.Forms.OpenFileDialog
-$f.InitialDirectory = pwd
-$f.Title = "${title}"
-$f.Filter = "${filter}All Files (*.*)|*.*"
-$f.ShowHelp = $true
-$f.Multiselect = $${Boolean(multiFile)}
-[void]$f.ShowDialog()
-if ($f.Multiselect) { $f.FileNames } else { $f.FileName }`
+		const dialog = config.filebox(title, filter, multiFile);
 		// write file
 		resolve(writeFile(workingDir, 'file.bat', dialog))
 	});
@@ -236,21 +217,7 @@ if ($f.Multiselect) { $f.FileNames } else { $f.FileName }`
 
 function getFolderChoose(workingDir, description = 'Please choose a folder.') {
 	return new Promise((resolve, reject) => {
-		let dialog = `:: fchooser.bat
-:: launches a folder chooser and outputs choice to the console
-:: https://stackoverflow.com/a/15885133/1683264
-
-@echo off
-setlocal
-
-set "psCommand="(new-object -COM 'Shell.Application')^
-.BrowseForFolder(0,'${description}',0,0).self.path""
-
-for /f "usebackq delims=" %%I in (\`powershell %psCommand%\`) do set "folder=%%I"
-
-setlocal enabledelayedexpansion
-echo !folder!
-endlocal`
+		const dialog = config.folderbox(description);
 		// write file
 		resolve(writeFile(workingDir, 'folder.bat', dialog))
 	});
@@ -262,53 +229,16 @@ class Dialog {
 			throw new Error('This script only works on Windows');
 		}
 		this.workingDir = this.createFolder();
+		/**
+		 * @type {WinTools}
+		 */
+		this.WinTools = new WinTools(this);
 		this.start();
 	}
 	start() {
-		const dialog_ = `Set objArgs = WScript.Arguments
-messageText = objArgs(0)
-messageType = objArgs(1)
-messageTitle = objArgs(2)
-retValue = MsgBox(messageText, messageType, messageTitle)
-WScript.StdOut.Write retValue
-WScript.Quit(0)`
+		const dialog_ = config.msgbox;
 		writeFile(this.workingDir, 'dialog.vbs', dialog_);
-		const input_ = `Dim retValue, msgText, msgTitle, msgTextDefault, xPos, yPos
-retValue = 0
-Set objArgs = WScript.Arguments
-length = WScript.Arguments.Length
-If length = 1 Then
-    msgText = objArgs(0)
-    retValue=Inputbox(msgText)
-End If
-If length = 2 Then
-    msgText = objArgs(0)
-    msgTitle = objArgs(1)
-    retValue=Inputbox(msgText,msgTitle)
-End If
-If length = 3 Then
-    msgText = objArgs(0)
-    msgTitle = objArgs(1)
-    msgTextDefault = objArgs(2)
-    retValue=Inputbox(msgText,msgTitle,msgTextDefault)
-End If
-If length = 4 Then
-    msgText = objArgs(0)
-    msgTitle = objArgs(1)
-    msgTextDefault = objArgs(2)
-    xPos = objArgs(3)
-    retValue=Inputbox(msgText,msgTitle,msgTextDefault,xPos)
-End If
-If length = 5 Then
-    msgText = objArgs(0)
-    msgTitle = objArgs(1)
-    msgTextDefault = objArgs(2)
-    xPos = objArgs(3)
-    yPos = objArgs(4)
-    retValue=Inputbox(msgText,msgTitle,msgTextDefault,xPos,yPos)
-End If
-WScript.StdOut.Write retValue
-WScript.Quit(0)`
+		const input_ = config.inputbox;
 		writeFile(this.workingDir, 'input.vbs', input_);
 	}
 	createFolder() {
@@ -320,6 +250,20 @@ WScript.Quit(0)`
 		fs.mkdirSync(tempFolder, { recursive: true });
 		return tempFolder;
 	}
+	/**
+	 * Create a message box
+	 * @param {?string} message 
+	 * @param {?string} title 
+	 * @param {?MessageTypeString} type 
+	 * @param {?ButtonString} button 
+	 * @param {?ButtonDefaultString} defaultButton 
+	 * @param {?IconString} icon 
+	 * @returns {Promise<Response>}
+	 * @example
+	 * const Dialog = require('node-win-dialog');
+	 * const log = new Dialog();
+	 * log.showDialog('Hello wolrd', 'title');
+	 */
 	showDialog(
 		message = ' ',
 		title = ' ',
@@ -349,6 +293,19 @@ WScript.Quit(0)`
 			convertStringToVBSString(title),
 		);
 	}
+	/**
+	 * Create a input box
+	 * @param {?string} message 
+	 * @param {?string} title 
+	 * @param {?string} defaultText 
+	 * @param {?number} xPos 
+	 * @param {?number} yPos 
+	 * @returns {Promise<Response>}
+	 * @example
+	 * const Dialog = require('node-win-dialog');
+	 * const log = new Dialog();
+	 * log.showInputBox('Hello wolrd', 'title', 'default text')
+	 */
 	showInputBox(message = '', title = '', defaultText = '', xPos, yPos) {
 		if (typeof message !== 'string') {
 			throw new Error('Message must be a string');
@@ -377,6 +334,17 @@ WScript.Quit(0)`
 			yPos,
 		);
 	}
+	/**
+	 * Show a file choose dialog
+	 * @param {?boolean} multiFile 
+	 * @param {?string} title 
+	 * @param  {...filterData} filterData 
+	 * @returns {Promise<Response>}
+	 * @example
+	 * const Dialog = require('node-win-dialog');
+	 * const log = new Dialog();
+	 * log.showOpenFileDialog(false, 'title');
+	 */
 	async showOpenFileDialog(multiFile, title, ...filterData) {
 		if (multiFile !== undefined && typeof multiFile !== 'boolean') {
 			throw new Error('Multifile option must be a boolean');
@@ -387,6 +355,15 @@ WScript.Quit(0)`
 		await getFileChoose(this.workingDir, multiFile, title, filterData);
 		return _runFile(path.resolve(this.workingDir, 'file.bat'));
 	}
+	/**
+	 * Display a folder choose dialog
+	 * @param {?string} description 
+	 * @returns {Promise<Response>}
+	 * @example
+	 * const Dialog = require('node-win-dialog');
+	 * const log = new Dialog();
+	 * log.showFolderDialog('Description');
+	 */
 	async showFolderDialog(description) {
 		if (description !== undefined && typeof description !== 'string') {
 			throw new Error('Description must be a string');

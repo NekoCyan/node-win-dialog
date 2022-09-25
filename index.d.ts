@@ -1,6 +1,6 @@
 declare class Dialog {
 	constructor();
-	public workingDir: string;
+	public WinTools: WinTools;
 	public showDialog(
 		message?: string,
 		title?: string,
@@ -23,10 +23,39 @@ declare class Dialog {
 		...filterData: filterData[]
 	): Promise<Response>;
 
-	public showFolderDialog(
-        description?: string,
-    ): Promise<Response>;
+	public showFolderDialog(description?: string): Promise<Response>;
 }
+
+declare class WinTools {
+	public readonly client: Dialog;
+	public readonly ready: boolean;
+	public setup(): WinTools;
+	public exitWin(mode?: ExitWinMode, force?: boolean): Promise<string>;
+	public monitor(mode?: MonitorMode): Promise<string>;
+	public restartExplorer(): Promise<string>;
+	public beep(freq: number, duration: number): Promise<string>;
+	public windowsBeep(): Promise<string>;
+	public cdrom(open?: boolean, name?: string): Promise<string>;
+	public mute(): Promise<string>;
+	public unmute(): Promise<string>;
+	public setVolume(volume: number): Promise<string>;
+	public setCursor(x: number, y: number): Promise<string>;
+	public moveCursor(x: number, y: number): Promise<string>;
+	public fakeKey(key: string, mode?: KeypressMode): Promise<string>;
+	public fakeMouse(mouse?: MouseMode, mode?: MousepressMode): Promise<string>;
+	public trayBalloon(title: string, text: string, iconPath: string, timeout?: number): Promise<string>;
+	public playMedia(path: string, duration: number): Promise<string>;
+}
+
+declare type ExitWinMode = 'logoff'| 'shutdown'| 'reboot'| 'poweroff'| 'cancel'| 'sleep'| 'standby'| 'hibernate';
+
+declare type MonitorMode = 'off'| 'on'| 'low';
+
+declare type KeypressMode = 'press'| 'down'| 'up';
+
+declare type MousepressMode = KeypressMode | 'dblclick';
+
+declare type MouseMode = 'left'| 'right'| 'middle'| 'wheel';
 
 declare type filterData = {
     name: string;

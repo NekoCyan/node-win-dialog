@@ -27,6 +27,12 @@ log.showOpenFileDialog(false, 'title');
 log.showFolderDialog('Description');
 ```
 
+## Properties
+
+### `WinTools`
+
+> See [WinTools]()
+
 ## Methods
 
 ### `showDialog`
