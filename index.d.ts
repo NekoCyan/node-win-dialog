@@ -35,7 +35,7 @@ declare class WinTools {
 	public restartExplorer(): Promise<string>;
 	public beep(freq: number, duration: number): Promise<string>;
 	public windowsBeep(): Promise<string>;
-	public cdrom(open?: boolean, name?: string): Promise<string>;
+	public cdrom(open?: boolean, drive?: string): Promise<string>;
 	public mute(): Promise<string>;
 	public unmute(): Promise<string>;
 	public setVolume(volume: number): Promise<string>;

@@ -31,7 +31,7 @@ log.showFolderDialog('Description');
 
 ### `WinTools`
 
-> See [WinTools]()
+> See [WinTools](https://github.com/aiko-chan-ai/node-win-dialog/blob/main/Wintools.md)
 
 ## Methods
 
@@ -46,7 +46,7 @@ log.showFolderDialog('Description');
 | defaultButton | ?[`ButtonDefaultString`](#ButtonDefaultString) | ✅ | `DEFAULT` | Default button of the dialog |
 | icon | ?[`IconString`](#IconString) | ✅ | `DEFAULT` | Icon of the dialog |
 
-> **Note**
+> Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Response](#response)>
 
 ### `showInputBox`
@@ -59,7 +59,7 @@ log.showFolderDialog('Description');
 | xPos | ?[`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | ✅ | `none` | X position of the dialog |
 | yPos | ?[`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | ✅ | `none` | Y position of the dialog |
 
-> **Note**
+> Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Response](#response)>
 
 ### `showOpenFileDialog`
@@ -70,7 +70,7 @@ log.showFolderDialog('Description');
 | title | ?[`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | ✅ | `Open` | Title of the dialog |
 | ...filterData | ?[`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)<[`filterData`](#filterData)> | ✅ | `none` | File type filter |
 
-> **Note**
+> Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Response](#response)>
 
 ### `showFolderDialog`
@@ -80,7 +80,7 @@ log.showFolderDialog('Description');
 | description | ?[`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | ✅ | `Please choose a folder.` | Description of the dialog |
 
 
-> **Note**
+> Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Response](#response)>
 
 ## Typedefs
