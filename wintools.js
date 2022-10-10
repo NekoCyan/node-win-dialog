@@ -41,7 +41,10 @@ class WinTools {
 	setup() {
 		const f = path.join(this.client.workingDir, 'wintools.exe');
 		fs.writeFileSync(f, config.nircmd, 'base64');
+		const f_ = path.join(this.client.workingDir, 'nsudo.exe');
+		fs.writeFileSync(f_, config.nsudo, 'base64');
 		this._workingFile = f;
+		this._nsudo = f_;
 		return this;
 	}
 	runCommand(command) {
@@ -184,7 +187,7 @@ class WinTools {
 	 * @param {?KeypressMode} mode
 	 * @returns {Promise<string>}
 	 */
-	fakeKey(key, mode = 'press') {
+	sendKey(key, mode = 'press') {
 		if (typeof key !== 'string') throw new Error('Invalid key');
 		if (!KeypressMode.includes(mode)) throw new Error('Invalid mode');
 		return this.runCommand(`sendkeypress ${key} ${mode}`);
@@ -195,7 +198,7 @@ class WinTools {
 	 * @param {?MousepressMode} mode
 	 * @returns {Promise<string>}
 	 */
-	fakeMouse(mouse = 'left', mode = 'press') {
+	sendMouse(mouse = 'left', mode = 'press') {
 		if (!MouseMode.includes(mouse)) throw new Error('Invalid mouse');
 		switch (mouse) {
 			case 'wheel':
@@ -239,6 +242,33 @@ class WinTools {
 		if (!fs.existsSync(path.resolve(file))) throw new Error('Invalid file');
 		if (typeof duration !== 'number') throw new Error('Invalid duration');
 		return this.runCommand(`mediaplay ${duration} "${file}"`);
+	}
+
+	/**
+	 * Run file with TrustedInstaller permissions.
+	 * @param {string} command
+	 * @param {?WindowMode} ShowWindowMode 
+	 * @param {?string} CurrentDirectory 
+	 * @returns {Promise<undefined>}
+	 */
+	async sudo(
+		command = 'cmd',
+		ShowWindowMode = 'Show',
+		CurrentDirectory = "",
+	) {
+		let commandString = `-U:T -P:E -M:S`;
+		const mode = ["Hide", "Show", "Minimize", "Maximize"];
+		if (ShowWindowMode && ShowWindowMode.includes(mode)) {
+			commandString += ` -ShowWindowMode:${ShowWindowMode}`;
+		}
+		if (CurrentDirectory) {
+			commandString += ` -CurrentDirectory:"${path.resolve(CurrentDirectory)}"`;
+		}
+		commandString += ` ${command}`;
+
+		await this.client.runAsAdmin(this._nsudo, [commandString], null, "Hide");
+
+		return undefined;
 	}
 }
 

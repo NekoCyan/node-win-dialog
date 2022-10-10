@@ -96,7 +96,7 @@
 > Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>
 
-### `fakeKey`
+### `sendKey`
 
 | Param | Type | Optional | Default |
 | --- | --- | --- | --- |
@@ -106,7 +106,7 @@
 > Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>
 
-### `fakeMouse`
+### `sendMouse`
 
 | Param | Type | Optional | Default |
 | --- | --- | --- | --- |
@@ -137,6 +137,18 @@
 
 > Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)>
+
+### `sudo`
+
+| Param | Type | Optional | Default |
+| --- | --- | --- | --- |
+| command | [`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) |  | `cmd.exe` |
+| showWindow | ?[`WindowMode`](https://github.com/aiko-chan-ai/node-win-dialog#WindowMode) |  | `Show` | Window Mode |
+| CurrentDirectory | ?[`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | ✅ | `None` |
+
+
+> Return
+> [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[void](#)>
 
 ## Typedef
 

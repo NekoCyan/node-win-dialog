@@ -10,3 +10,4 @@ log.showOpenFileDialog(false, 'title');
 
 log.showFolderDialog('Description');
 
+log.runAsAdmin('cmd', undefined, undefined, "Show");

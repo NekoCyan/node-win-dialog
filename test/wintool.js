@@ -31,8 +31,10 @@ async function test (r = 150) {
     // Display notification (5s)
     await log.WinTools.trayBalloon('Nyancat.mp3', 'end', './test/icon.ico', 5000);
     // Press ctrl+c (stop playing)
-    log.WinTools.fakeKey('ctrl', 'down');
-    log.WinTools.fakeKey('c', 'down');
+    log.WinTools.sendKey('ctrl', 'down');
+    log.WinTools.sendKey('c', 'down');
+    // Run as TrustedInstaller
+    log.WinTools.sudo('cmd');
 }
 
 test();

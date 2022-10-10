@@ -83,6 +83,19 @@ log.showFolderDialog('Description');
 > Return
 > [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[Response](#response)>
 
+### `runAsAdmin`
+
+| Param | Type | Optional | Default | Description |
+| --- | --- | --- | --- | --- |
+| command | [`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) |  | `cmd.exe` | File / Application |
+| args | [?[`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)<[`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)> | ✅ | `none` | Command Arguments |
+| workingDir | ?[`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | ✅ | `None` | Working Dir |
+| showWindow | ?[`WindowMode`](#WindowMode) |  | `Show` | Window Mode |
+
+
+> Return
+> [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)<[void](#)>
+
 ## Typedefs
 
 ### `Response`
@@ -110,6 +123,16 @@ log.showFolderDialog('Description');
 | --- | --- |
 | name | [`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) |
 | ext | [`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)  |
+
+### `WindowMode`
+
++ `Hide`
++ `Show`
++ `Minimize`
++ `Maximize`
+
+**Types** 
++ [`string`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 ### `ReturnButton`
 

@@ -371,6 +371,47 @@ class Dialog {
 		await getFolderChoose(this.workingDir, description);
 		return _runFolder(path.resolve(this.workingDir, 'folder.bat'));
 	}
+	/**
+	 * Show windows mode
+	 * * `Hide`
+	 * * `Show`
+	 * * `Minimize`
+	 * * `Maximize`
+	 * @typedef {String} WindowMode
+	 */
+
+	/**
+	 * Run a command (Admin)
+	 * @param {string} command 
+	 * @param {?string[]} args 
+	 * @param {?string} workingDir 
+	 * @param {?WindowMode} showWindow 
+	 * @returns {Promise<undefined>}
+	 */
+	async runAsAdmin(
+		command = 'cmd.exe',
+		args = [],
+		workingDir = "",
+		showWindow = 'Show',
+	) {
+		args = args.flat(2);
+		args = args.join(" ");
+		args = args.replace(/"/g, '""');
+		const mode = ["Hide", "Show", "Minimize", "Maximize"];
+		// String
+		showWindow = mode.indexOf(showWindow);
+		if (showWindow == -1) {
+			throw new Error('Invalid show window mode');
+		}
+		const path_ = path.resolve(this.workingDir, 'runasadmin.vbs');
+		const script = config.runAsAdmin(command, args, workingDir, showWindow);
+		writeFile(this.workingDir, 'runasadmin.vbs', script);
+		await _runVBS(
+			'cscript',
+			path_,
+		);
+		return undefined
+	}
 }
 
 module.exports = Dialog;

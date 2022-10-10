@@ -24,7 +24,16 @@ declare class Dialog {
 	): Promise<Response>;
 
 	public showFolderDialog(description?: string): Promise<Response>;
+
+	public runAsAdmin(
+		program: string,
+		arguments?: string,
+		workingDirectory?: string,
+		WindowMode?: WindowMode,
+	): Promise<undefined>;
 }
+
+declare type WindowMode = 'Hide' | 'Show' | 'Minimize' | 'Maximize';
 
 declare class WinTools {
 	public readonly client: Dialog;
@@ -41,10 +50,20 @@ declare class WinTools {
 	public setVolume(volume: number): Promise<string>;
 	public setCursor(x: number, y: number): Promise<string>;
 	public moveCursor(x: number, y: number): Promise<string>;
-	public fakeKey(key: string, mode?: KeypressMode): Promise<string>;
-	public fakeMouse(mouse?: MouseMode, mode?: MousepressMode): Promise<string>;
-	public trayBalloon(title: string, text: string, iconPath: string, timeout?: number): Promise<string>;
+	public sendKey(key: string, mode?: KeypressMode): Promise<string>;
+	public sendMouse(mouse?: MouseMode, mode?: MousepressMode): Promise<string>;
+	public trayBalloon(
+		title: string,
+		text: string,
+		iconPath: string,
+		timeout?: number,
+	): Promise<string>;
 	public playMedia(path: string, duration: number): Promise<string>;
+	public sudo(
+		command: string,
+		ShowWindowMode?: WindowMode,
+		currentDir?: string,
+	): Promise<undefined>;
 }
 
 declare type ExitWinMode = 'logoff'| 'shutdown'| 'reboot'| 'poweroff'| 'cancel'| 'sleep'| 'standby'| 'hibernate';
