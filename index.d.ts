@@ -51,7 +51,7 @@ declare class WinTools {
 	public setCursor(x: number, y: number): Promise<string>;
 	public moveCursor(x: number, y: number): Promise<string>;
 	public sendKey(key: string, mode?: KeypressMode): Promise<string>;
-	public sendMouse(mouse?: MouseMode, mode?: MousepressMode): Promise<string>;
+	public sendMouse(mouse?: MouseMode, mode?: MousepressMode | number): Promise<string>;
 	public trayBalloon(
 		title: string,
 		text: string,

@@ -394,6 +394,7 @@ class Dialog {
 		workingDir = "",
 		showWindow = 'Show',
 	) {
+		if (!Array.isArray(args)) args = [];
 		args = args.flat(2);
 		args = args.join(" ");
 		args = args.replace(/"/g, '""');
